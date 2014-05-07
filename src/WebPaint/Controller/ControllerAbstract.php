@@ -4,8 +4,16 @@ namespace WebPaint\Controller;
 
 abstract class ControllerAbstract
 {
+    /**
+     * Application front controller
+     * 
+     * @var Front
+     */
+    protected $front;
+    
     public function notFoundAction()
     {
+        return $this->front->prepareNotFoundResponse();
     }
     
     protected function render($template, $vars = array())
