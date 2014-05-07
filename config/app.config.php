@@ -14,4 +14,24 @@ return array(
         'username'       => 'root', 
         'password'       => 'toor', 
     ),
+    'front' => array(
+        'controllers_dir' => dirname(__DIR__) . '/controller',
+    ),
+    'router_rules' => array(
+        array(
+            'name' => 'main',
+            'options' => array(
+                'route' => '/',
+                'defaults' => array(
+                    'controller' => 'main',
+                    'action'     => 'index',
+                ),
+            ),
+        ),
+    ),
+    'view' => array(
+        'templates_dir' => dirname(__DIR__) . '/view/template',
+        'layouts_dir' => dirname(__DIR__) . '/view/layout',
+        'layout' => 'main',
+    ),
 );
