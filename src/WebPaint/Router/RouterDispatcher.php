@@ -12,7 +12,11 @@ class RouterDispatcher
     
     public function __construct($rules = array())
     {
-        $this->rules = $rules;
+        $this->rules = array();
+        foreach ($rules as $rule)
+        {
+            $this->addRule($rule);
+        }
     }
     
     /**
