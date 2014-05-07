@@ -19,6 +19,13 @@ class Application
     protected $config;
     
     /**
+     * Application front controller
+     * 
+     * @var Controller\Front
+     */
+    protected $front;
+    
+    /**
      * Router dispatcher instance
      * 
      * @var Router\RouterDispatcher
@@ -68,6 +75,20 @@ class Application
     public function getConfig()
     {
         return $this->config;
+    }
+    
+    /**
+     * Get application front controller
+     * 
+     * @return Controller\Front
+     */
+    public function getFront()
+    {
+        if (!($this->front instanceof Controller\Front))
+        {
+            $this->front = new Controller\Front($this);
+        }
+        return $this->front;
     }
     
     public function getRouterDispatcher()
