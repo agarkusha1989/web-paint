@@ -4,9 +4,36 @@ namespace WebPaint;
 
 class Application
 {
-    public function __construct()
+    /**
+     * Application config container
+     * 
+     * @var Config\Container
+     */
+    protected $config;
+    
+    public function __construct($configFilename)
     {
         spl_autoload_register(array($this, 'loadClass'));
+        
+        if (!file_exists($configFilename))
+        {
+            throw new \InvalidArgumentException(sprintf(
+                    "Config filename %s not found, application init failed", 
+                    $configFilename
+            ));
+        }
+        
+        $this->config = new Config\Container(include $configFilename);
+    }
+    
+    /**
+     * Get application config container
+     * 
+     * @return Config\Container
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
     
     /**
