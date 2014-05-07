@@ -32,6 +32,13 @@ class Application
      */
     protected $routerDispatcher;
     
+    /**
+     * View renderer
+     * 
+     * @var View\Renderer
+     */
+    protected $viewRenderer;
+    
     public function __construct($configFilename)
     {
         spl_autoload_register(array($this, 'loadClass'));
@@ -109,6 +116,26 @@ class Application
         }
         return $this->routerDispatcher;
     }
+ 
+    /**
+     * Get view renderer
+     * 
+     * @return View\Renderer
+     * @throws \RuntimeException
+     */
+    public function getViewRenderer()
+    {
+        if (!($this->viewRenderer instanceof View\Renderer))
+        {
+            $config = $this->getConfig();
+            if (!isset($config->view))
+            {
+                throw new \RuntimeException("Initialization error view renderer, the configuration is empty or not installed");
+            }
+            $this->viewRenderer = new View\Renderer($config->view->toArray());
+        }
+        return $this->viewRenderer;
+    }
     
     /**
      * Method to load classes
@@ -130,21 +157,23 @@ class Application
     public function run()
     {
         // FIXME get requested route
-        $route = $_SERVER['REQUEST_URI'];
-        
+        $route            = $_SERVER['REQUEST_URI'];
         $routerDispatcher = $this->getRouterDispatcher();
+        $front            = $this->getFront();
         
         try 
         {
-            $result = $routerDispatcher->dispatch($route);
+            $routerResult = $routerDispatcher->dispatch($route);
+            
+            $front->run($routerResult);
         }
         catch (\WebPaint\Router\RouteNotFound $exc) 
         {
             // FIXME dispatch failed
-            
+            $front->prepareNotFoundResponse();
         }
         
         // TODO rendering application output
-        echo 'Web paint is running!';
+        echo $front->getResponse();
     }
 }
