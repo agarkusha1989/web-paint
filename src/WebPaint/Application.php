@@ -5,6 +5,13 @@ namespace WebPaint;
 class Application
 {
     /**
+     * Application db adapter instance
+     * 
+     * @var Db\Adapter;
+     */
+    protected $dbAdapter;
+    
+    /**
      * Application config container
      * 
      * @var Config\Container
@@ -24,6 +31,26 @@ class Application
         }
         
         $this->config = new Config\Container(include $configFilename);
+    }
+    
+    /**
+     * Get application db adapter instance
+     * 
+     * @return Db\Adapter
+     * @throws \RuntimeException
+     */
+    public function getDbAdapter()
+    {
+        if (!($this->dbAdapter instanceof Db\Adapter))
+        {
+            $config = $this->getConfig();
+            if (!isset($config->db))
+            {
+                throw new \RuntimeException("Initialization error database, the configuration is empty or not installed");
+            }
+            $this->dbAdapter = new Db\Adapter($config->db->toArray());
+        }
+        return $this->dbAdapter;
     }
     
     /**
