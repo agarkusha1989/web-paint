@@ -36,15 +36,19 @@ class RouterDispatcher
                 
                 if (!isset($defaults['controller']))
                 {
-                    throw new RouteNotFound($route);
+                    throw new RouteNotFound(sprintf(
+                            "Unable to determine the controller for the route %s",
+                            $route
+                    ));
                 }
+                $controller = $defaults['controller'];
                 
                 if (!isset($defaults['action']))
                 {
-                    throw new RouteNotFound($route);
+                    throw new RouteNotFound(sprintf(
+                            "Unable to determine the action of the controller %s for the route %s",
+                            $controller, $route));
                 }
-                
-                $controller = $defaults['controller'];
                 $action     = $defaults['action'];
                 
                 return new RouterResult($rule, $route, $controller, $action);

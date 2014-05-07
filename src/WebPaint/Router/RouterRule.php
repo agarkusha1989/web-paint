@@ -16,6 +16,10 @@ class RouterRule
         {
             throw new \InvalidArgumentException('Invalid router options, was missed a required option "route"');
         }
+        if (!$this->hasOption('defaults'))
+        {
+            throw new \InvalidArgumentException('Invalid router options, was missed a required option "defaults"');
+        }
     }
     
     public function getOption($name, $default = null)
