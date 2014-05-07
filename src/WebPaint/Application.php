@@ -18,6 +18,13 @@ class Application
      */
     protected $config;
     
+    /**
+     * Router dispatcher instance
+     * 
+     * @var Router\RouterDispatcher
+     */
+    protected $routerDispatcher;
+    
     public function __construct($configFilename)
     {
         spl_autoload_register(array($this, 'loadClass'));
@@ -63,6 +70,20 @@ class Application
         return $this->config;
     }
     
+    public function getRouterDispatcher()
+    {
+        if (!($this->routerDispatcher instanceof Router\RouterDispatcher))
+        {
+            $config = $this->getConfig();
+            if (!isset($config->router_rules))
+            {
+                throw new \RuntimeException("Initialization error router, the configuration is empty or not installed");
+            }
+            $this->routerDispatcher = new Router\RouterDispatcher($config->router_rules->toArray());
+        }
+        return $this->routerDispatcher;
+    }
+    
     /**
      * Method to load classes
      * 
@@ -82,6 +103,22 @@ class Application
      */
     public function run()
     {
+        // FIXME get requested route
+        $route = $_SERVER['REQUEST_URI'];
+        
+        $routerDispatcher = $this->getRouterDispatcher();
+        
+        try 
+        {
+            $result = $routerDispatcher->dispatch($route);
+        }
+        catch (\WebPaint\Router\RouteNotFound $exc) 
+        {
+            // FIXME dispatch failed
+            
+        }
+        
+        // TODO rendering application output
         echo 'Web paint is running!';
     }
 }
