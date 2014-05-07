@@ -91,6 +91,11 @@ class Application
         return $this->front;
     }
     
+    /**
+     * 
+     * @return Router\RouterDispatcher
+     * @throws \RuntimeException
+     */
     public function getRouterDispatcher()
     {
         if (!($this->routerDispatcher instanceof Router\RouterDispatcher))
