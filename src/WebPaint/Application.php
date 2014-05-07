@@ -16,7 +16,7 @@ class Application
      */
     public function loadClass($class)
     {
-        $filename = __DIR__ . '/' . str_replace("\\", '/', $class) . '.php';
+        $filename = dirname(__DIR__) . '/' . str_replace("\\", '/', $class) . '.php';
         if (file_exists($filename))
         {
             require_once $filename;
