@@ -37,7 +37,7 @@
             
             <!-- MainMenu start -->
             <dvi class="collapse navbar-collapse" id="main-navigation">
-                <?php if ($this->helperManager->get('authentication')->hasIdentity()): ?>
+                <?php if ($this->authentication()->hasIdentity()): ?>
                 <ul class="nav navbar-nav">
                     <li><a href="/paint">Paint</a></li>
                 </ul>
@@ -48,8 +48,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
                     
                         <ul class="dropdown-menu">
-                            <?php if ($this->helperManager->get('authentication')->hasIdentity()) { ?>
-                            <li class="disabled"><a href="">Signed as <b><?php echo $this->helperManager->get('authentication')->getIdentity()->username; ?></b></a></li>
+                            <?php if ($this->authentication()->hasIdentity()) { ?>
+                            <li class="disabled"><a href="">Signed as <b><?php echo $this->authentication()->getIdentity()->username; ?></b></a></li>
                             <li class="divider"></li>
                             <li><a href="/signout">Signout</a></li>
                             <?php } else { ?>
