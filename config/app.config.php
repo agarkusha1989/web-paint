@@ -10,6 +10,7 @@ return array(
         'identityColumn' => 'email',
         'credentialColumn' => 'psswd',
         'encryptionAlgorythm' => 'md5',
+        'identityClass' => 'Model\User',
     ),
     'db' => array(
         'dsn'            => 'mysql:dbname=web_paint_db;host=localhost',
@@ -31,6 +32,46 @@ return array(
                 'defaults' => array(
                     'controller' => 'main',
                     'action'     => 'index',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'paint',
+            'options' => array(
+                'route' => '/paint',
+                'defaults' => array(
+                    'controller' => 'paint',
+                    'action' => 'index',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'signup',
+            'options' => array(
+                'route' => '/signup',
+                'defaults' => array(
+                    'controller' => 'account',
+                    'action' => 'signup',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'signin',
+            'options' => array(
+                'route' => '/signin',
+                'defaults' => array(
+                    'controller' => 'account',
+                    'action' => 'signin',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'signout',
+            'options' => array(
+                'route' => '/signout',
+                'defaults' => array(
+                    'controller' => 'account',
+                    'action' => 'signout',
                 ),
             ),
         ),

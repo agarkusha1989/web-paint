@@ -1,0 +1,29 @@
+<form method="post">
+    
+    <div class="form-group">
+        <label>Email:</label>
+        <input class="form-control" type="text" name="email"<?php echo isset($values['email']) ? " value='{$values['email']}'" : ''; ?> />
+        <?php echo isset($messages['email']) ? "<div class='alert alert-danger'>{$messages['email']}</div>" : ''; ?>
+    </div>
+    
+    <div class="form-group">
+        <label>Username:</label>
+        <input class="form-control" type="text" name="username"<?php echo isset($values['username']) ? " value='{$values['username']}'" : ''; ?> />
+        <?php echo isset($messages['username']) ? "<div class='alert alert-danger'>{$messages['username']}</div>" : ''; ?>
+    </div>
+    
+    <div class="form-group">
+        <label>Password:</label>
+        <input class="form-control" type="password" name="password"<?php echo isset($values['password']) ? " value='{$values['password']}'" : ''; ?> />
+        <?php echo isset($messages['password']) ? "<div class='alert alert-danger'>{$messages['password']}</div>" : ''; ?>
+    </div>
+    
+    <div class="form-group">
+        <label>Confirm:</label>
+        <input class="form-control" type="password" name="confirm"<?php echo isset($values['confirm']) ? " value='{$values['confirm']}'" : ''; ?> />
+        <?php echo isset($messages['confirm']) ? "<div class='alert alert-danger'>{$messages['confirm']}</div>" : ''; ?>
+    </div>
+    
+    <input class="btn btn-default" type="submit" name="submit" value="Signup" />
+    
+</form>

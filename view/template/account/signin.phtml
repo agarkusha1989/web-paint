@@ -1,0 +1,15 @@
+<form method="post">
+    <legend>Signin</legend>
+    
+    <div class="form-group">
+        <label>E-mail:</label>
+        <input class="form-control" type="text" name="email"<?php echo isset($values['email']) ? " value='{$values['email']}'" : ''; ?> />
+        <?php echo isset($messages['email']) ? "<div class='alert alert-danger'>{$messages['email']}</div>" : ''; ?>
+    </div>
+    <div class="form-group">
+        <label>Password:</label>
+        <input class="form-control" type="password" name="password"<?php isset($values['password']) ? " value='{$values['password']}'" : ''; ?> />
+        <?php echo isset($messages['password']) ? "<div class='alert alert-danger'>{$messages['password']}</div>" : ''; ?>
+    </div>
+    <input type="submit" name="submit" value="Login" />
+</form>
