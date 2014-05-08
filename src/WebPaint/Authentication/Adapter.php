@@ -55,20 +55,24 @@ class Adapter
      */
     protected $rowSet;
     
-    function __construct(DbAdapter $dbAdapter, $table = null, $indentityColumn = null, $credentialColumn = null)
+    function __construct(DbAdapter $dbAdapter, $options = array())
     {
         $this->dbAdapter = $dbAdapter;
-        if ($table != null)
+        if (isset($options['table']))
         {
             $this->table = $table;
         }
-        if ($indentityColumn != null)
+        if (isset($options['indentityColumn']))
         {
             $this->indentityColumn = $indentityColumn;
         }
-        if ($credentialColumn != null)
+        if (isset($options['credentialColumn']))
         {
             $this->credentialColumn = $credentialColumn;
+        }
+        if (isset($options['encryptionAlgorythm']))
+        {
+            $this->encryptionAlgorythm = $options['encryptionAlgorythm'];
         }
     }
 
