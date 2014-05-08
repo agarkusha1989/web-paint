@@ -11,7 +11,7 @@ use WebPaint\Db\Adapter as DbAdapter;
 class Adapter
 {
     
-    protected $indentity;
+    protected $identity;
     protected $credential;
     
     /**
@@ -32,7 +32,7 @@ class Adapter
      * 
      * @var string
      */
-    protected $indentityColumn = 'email';
+    protected $identityColumn = 'email';
     
     /**
      * Authenticate credential value
@@ -60,15 +60,15 @@ class Adapter
         $this->dbAdapter = $dbAdapter;
         if (isset($options['table']))
         {
-            $this->table = $table;
+            $this->table = $options['table'];
         }
-        if (isset($options['indentityColumn']))
+        if (isset($options['identityColumn']))
         {
-            $this->indentityColumn = $indentityColumn;
+            $this->identityColumn = $options['identityColumn'];
         }
         if (isset($options['credentialColumn']))
         {
-            $this->credentialColumn = $credentialColumn;
+            $this->credentialColumn = $options['credentialColumn'];
         }
         if (isset($options['encryptionAlgorythm']))
         {
@@ -83,11 +83,18 @@ class Adapter
      */
     public function authenticate()
     {
+        $this->rowSet = null;
+        
+        if ($this->identity == null || $this->credential == null)
+        {
+            return false;
+        }
+        
         $params = array($this->identity, $this->credential);
         
         $statement = $this->dbAdapter->prepare(
                 'select * from ' . $this->table .
-                ' where ' . $this->indentityColumn . ' = ?' .
+                ' where ' . $this->identityColumn . ' = ?' .
                 ' and ' . $this->credentialColumn . ' = ' . 
                 $this->encryptionAlgorythm . '(?)');
         $statement->execute($params);
@@ -108,9 +115,9 @@ class Adapter
         return $this->rowSet;
     }
     
-    public function setIndentity($indentity)
+    public function setIdentity($identity)
     {
-        $this->indentity = $indentity;
+        $this->identity = $identity;
     }
 
     public function setCredential($credential)
