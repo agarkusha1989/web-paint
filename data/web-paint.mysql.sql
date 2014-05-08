@@ -20,3 +20,6 @@ create table `images`
     
     primary key(`id`)
 ) engine = innodb default character set = utf8;
+
+insert into `users` values (1, 'jonyb@gmail.com', md5('secret'), 'jonyb');
+insert into `users` values (2, 'debug@gmail.com', md5('debug'), 'debug');
