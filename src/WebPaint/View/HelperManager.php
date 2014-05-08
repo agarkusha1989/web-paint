@@ -38,10 +38,15 @@ class HelperManager
                 $name = $this->aliases[$name];
             }
             
-            if (class_exists($name))
+            if (!class_exists($name))
             {
-                $this->helpers[$name] = new $name($this->application);
+                throw new \InvalidArgumentException(sprintf(
+                        'Error get view helper, helper %s not found',
+                        $name
+                ));
             }
+            
+            $this->helpers[$name] = new $name($this->application);
         }
         return $this->helpers[$name];
     }

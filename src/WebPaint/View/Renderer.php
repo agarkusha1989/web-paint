@@ -54,13 +54,6 @@ class Renderer
     
     public function __call($name, $arguments)
     {
-        if (!$this->helperManager->has($name))
-        {
-            throw new \InvalidArgumentException(sprintf(
-                    'Error get view helper, helper %s not found',
-                    $name
-            ));
-        }
         $helper = $this->helperManager->get($name);
         return $helper($arguments);
     }
