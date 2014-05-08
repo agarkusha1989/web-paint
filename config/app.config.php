@@ -5,6 +5,12 @@
  * 
  */
 return array(
+    'authentication' => array(
+        'table' => 'users',
+        'identityColumn' => 'email',
+        'credentialColumn' => 'psswd',
+        'encryptionAlgorythm' => 'md5',
+    ),
     'db' => array(
         'dsn'            => 'mysql:dbname=web_paint_db;host=localhost',
         'driver_options' => array(
