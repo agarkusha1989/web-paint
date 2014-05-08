@@ -5,6 +5,13 @@ namespace WebPaint;
 class Application
 {
     /**
+     * Application authentication service
+     * 
+     * @var Authentication\Authentication
+     */
+    protected $authentication;
+    
+    /**
      * Application db adapter instance
      * 
      * @var Db\Adapter;
@@ -52,6 +59,29 @@ class Application
         }
         
         $this->config = new Config\Container(include $configFilename);
+    }
+    
+    public function getAuthentication()
+    {
+        if (!($this->authentication instanceof Authentication\Authentication))
+        {
+            $config = $this->getConfig();
+            if (!isset($config->authentication))
+            {
+                // default options
+                $options = array();
+            }
+            else
+            {
+                $options = $config->authentication->toArray();
+            }
+            $dbAdapter = $this->getDbAdapter();
+            
+            $this->authentication = new Authentication\Authentication(
+                    new Authentication\Storage(),
+                    new Authentication\Adapter($dbAdapter, $options));
+        }
+        return $this->authentication;
     }
     
     /**
