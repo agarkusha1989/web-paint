@@ -38,6 +38,16 @@ class Front
         $this->controllersDir = $config->front->controllers_dir; 
     }
     
+    /**
+     * Get running application instance
+     * 
+     * @return Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+    
     public function getResponse()
     {
         return $this->response;
