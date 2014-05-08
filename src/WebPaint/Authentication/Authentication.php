@@ -18,6 +18,8 @@ class Authentication
      */
     protected $storage;
     
+    protected $identityClass = '\stdClass';
+    
     public function __construct(Storage $storage, Adapter $adapter)
     {
         $this->adapter = $adapter;
@@ -57,11 +59,42 @@ class Authentication
     
     public function getIdentity()
     {
-        return $this->storage->read();
+        $array = $this->storage->read();
+        
+        if (!class_exists($this->identityClass))
+        {
+            return $array;
+        }
+        $class = $this->identityClass;
+        $identity = new $class();
+        if (method_exists($identity, 'fromArray'))
+        {
+            $identity->fromArray($array);
+        }
+        else
+        {
+            foreach ($array as $name => $value)
+            {
+                $setterMethod = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
+                
+                if (method_exists($identity, $setterMethod))
+                {
+                    $identity->$setterMethod($value);
+                }
+                $identity->$name = $value;
+            }
+        }
+        return $identity;
     }
     
     public function hasIdentity()
     {
         return !$this->storage->isEmpty();
     }
+    
+    public function setIdentityClass($identityClass)
+    {
+        $this->identityClass = $identityClass;
+    }
+
 }

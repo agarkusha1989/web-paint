@@ -80,6 +80,12 @@ class Application
             $this->authentication = new Authentication\Authentication(
                     new Authentication\Storage(),
                     new Authentication\Adapter($dbAdapter, $options));
+            
+            $config = $this->getConfig();
+            if (isset($config->authentication->identityClass))
+            {
+                $this->authentication->setIdentityClass($config->authentication->identityClass);
+            }
         }
         return $this->authentication;
     }
