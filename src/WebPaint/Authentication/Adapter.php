@@ -10,6 +10,10 @@ use WebPaint\Db\Adapter as DbAdapter;
  */
 class Adapter
 {
+    
+    protected $indentity;
+    protected $credential;
+    
     /**
      *
      * @var \WebPaint\Db\Adapter
@@ -71,13 +75,11 @@ class Adapter
     /**
      * Authenticate a identity and credential
      * 
-     * @param string $identity
-     * @param string $credential
      * @return boolean
      */
-    public function authenticate($identity, $credential)
+    public function authenticate()
     {
-        $params = array($identity, $credential);
+        $params = array($this->identity, $this->credential);
         
         $statement = $this->dbAdapter->prepare(
                 'select * from ' . $this->table .
@@ -101,4 +103,15 @@ class Adapter
     {
         return $this->rowSet;
     }
+    
+    public function setIndentity($indentity)
+    {
+        $this->indentity = $indentity;
+    }
+
+    public function setCredential($credential)
+    {
+        $this->credential = $credential;
+    }
+
 }
