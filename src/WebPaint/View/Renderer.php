@@ -2,6 +2,8 @@
 
 namespace WebPaint\View;
 
+use WebPaint\Application;
+
 class Renderer
 {
     /**
@@ -32,7 +34,25 @@ class Renderer
      */
     protected $templatesDir;
     
-    public function __construct(array $options)
+    /**
+     * View helper manager
+     * 
+     * @var HelperManager
+     */
+    protected $helperManager;
+    
+    public function __construct(Application $application)
+    {
+        $config = $application->getConfig();
+        if (!isset($config->view))
+        {
+            throw new \RuntimeException("Initialization error view renderer, the configuration is empty or not installed");
+        }
+        $this->setOptions($config->view->toArray());
+        $this->helperManager = new HelperManager($application);
+    }
+    
+    public function setOptions(array $options)
     {
         if (!isset($options['layouts_dir']))
         {

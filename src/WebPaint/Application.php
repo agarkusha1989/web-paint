@@ -157,12 +157,7 @@ class Application
     {
         if (!($this->viewRenderer instanceof View\Renderer))
         {
-            $config = $this->getConfig();
-            if (!isset($config->view))
-            {
-                throw new \RuntimeException("Initialization error view renderer, the configuration is empty or not installed");
-            }
-            $this->viewRenderer = new View\Renderer($config->view->toArray());
+            $this->viewRenderer = new View\Renderer($this);
         }
         return $this->viewRenderer;
     }
