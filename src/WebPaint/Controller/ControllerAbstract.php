@@ -11,6 +11,11 @@ abstract class ControllerAbstract
      */
     protected $front;
     
+    public function __construct(Front $front)
+    {
+        $this->front = $front;
+    }
+    
     public function notFoundAction()
     {
         return $this->front->prepareNotFoundResponse();

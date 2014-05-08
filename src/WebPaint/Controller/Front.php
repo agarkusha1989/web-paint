@@ -67,7 +67,7 @@ class Front
         {
             return $this->prepareNotFoundResponse();
         }
-        $controller = new $class($front);
+        $controller = new $class($this);
         $method = str_replace(' ', '', ucwords(str_replace('-', ' ', $routerResult->getAction()))) . 'Action';
         if (!method_exists($controller, $method))
         {
