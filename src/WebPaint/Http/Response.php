@@ -1,6 +1,6 @@
 <?php
 
-namespace Http;
+namespace WebPaint\Http;
 
 class Response
 {
