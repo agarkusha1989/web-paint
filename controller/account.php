@@ -61,6 +61,8 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
                 if ($authentication->authenticate())
                 {
                     header('Location: /');
+                    
+                    exit;
                 }
                 $viewModel->setVariable('error', true);
             }
