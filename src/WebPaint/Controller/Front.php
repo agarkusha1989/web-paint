@@ -7,6 +7,7 @@ use WebPaint\Router\RouterResult;
 use WebPaint\View\ViewModel;
 use WebPaint\Http\Response;
 use WebPaint\View\JsonModel;
+use WebPaint\View\ImageModel;
 
 class Front
 {
@@ -112,7 +113,7 @@ class Front
         }
         
         // check controller result
-        if ($this->controllerResult == null)
+        if ($this->controllerResult === null)
         {
             $this->controllerResult = new ViewModel();
         }
@@ -136,6 +137,17 @@ class Front
             // create json response
             $headers = array('Content-Type: application/json');
             $content = $this->controllerResult->getJson();
+            
+            $this->response = new Response(200, $content, $headers);
+        }
+        else if ($this->controllerResult instanceof ImageModel)
+        {
+            // create image response
+            $content = $this->controllerResult->getData();
+            $headers = array(
+                "Content-Type: " . $this->controllerResult->getMimeType(),
+                "Content-Length: " . strlen($content)
+            );
             
             $this->response = new Response(200, $content, $headers);
         }
@@ -173,7 +185,7 @@ class Front
         {
             $this->prepareNotFoundResponse(sprintf(
                     'Not found controller %s action %s in file %s',
-                    $controller, $routerResult->getAction(), $file));
+                    $routerResult->getController(), $routerResult->getAction(), $file));
             return false;
         }
         

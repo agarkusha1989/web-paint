@@ -243,6 +243,9 @@ class Application
                 case 403:
                     $template = 'error/403err';
                     break;
+                case 500:
+                    $template = 'error/500err';
+                    break;
                 default:
                     $template = null;
             }
