@@ -15,7 +15,7 @@ create table `images`
 (
     `id` bigint unsigned not null auto_increment,
     `user_id` bigint unsigned not null,
-    `image_src` text not null,
+    `image` longblob not null,
     `title` varchar(32) not null,
     
     primary key(`id`)
