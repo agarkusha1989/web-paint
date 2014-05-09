@@ -6,6 +6,7 @@ use WebPaint\Application;
 use WebPaint\Router\RouterResult;
 use WebPaint\View\ViewModel;
 use WebPaint\Http\Response;
+use WebPaint\View\JsonModel;
 
 class Front
 {
@@ -182,11 +183,11 @@ class Front
     
     public function prepareNotFoundResponse($message = '')
     {
-        return $this->response = new Response(404, $message);
+        return ($this->response = new Response(404, $message));
     }
     
     public function prepareForbiddenResponse($message = '')
     {
-        return $this->response = new Response(403, $message);
+        return ($this->response = new Response(403, $message));
     }
 }
