@@ -38,7 +38,7 @@ class Response
         }
         else
         {
-            heaader('HTTP/1.1 ' . $this->statusCode);
+            header('HTTP/1.1 ' . $this->statusCode);
         }
         
         foreach ($this->headers as $header)
