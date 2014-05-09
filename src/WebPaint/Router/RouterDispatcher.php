@@ -55,7 +55,9 @@ class RouterDispatcher
             }
         }
         
-        throw new RouteNotFound($route);
+        throw new RouteNotFound(sprintf(
+                'Unable to determine the controller and action for the route %s',
+                $route));
     }
     
     public function addRule($rule)

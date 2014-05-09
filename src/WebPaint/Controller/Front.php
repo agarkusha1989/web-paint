@@ -4,6 +4,8 @@ namespace WebPaint\Controller;
 
 use WebPaint\Application;
 use WebPaint\Router\RouterResult;
+use WebPaint\View\ViewModel;
+use WebPaint\Http\Response;
 
 class Front
 {
@@ -23,9 +25,15 @@ class Front
     
     /**
      *
-     * @var mixed
+     * @var \Http\Response
      */
     protected $response;
+    
+    /**
+     *
+     * @var \WebPaint\View\ViewModel
+     */
+    protected $controllerResult;
     
     public function __construct(Application $app)
     {
@@ -48,70 +56,137 @@ class Front
         return $this->application;
     }
     
+    /**
+     * Get response
+     * 
+     * @return Response
+     */
     public function getResponse()
     {
         return $this->response;
     }
     
-    public function run(RouterResult $routerResult)
+    protected function checkPermissions(RouterResult $routerResult)
     {
         $authentication = $this->application->getAuthentication();
         $permission     = $this->application->getPermission();
         
-        $role = 'guest';
-        if ($authentication->hasIdentity())
-        {
-            $role = 'user';
-        }
+        $role           = $authentication->hasIdentity() ? 'user' : 'guest';
+        $route          = $routerResult->getMatchedRouterRule()->getName();
+        $controller     = $routerResult->getController();
+        $action         = $routerResult->getAction();
         
-        if (!$permission->routeIsAllowed($role, $routerResult->getMatchedRouterRule()->getName()))
+        if (!$permission->routeIsAllowed($role, $route))
         {
             // access denied
-            exit('Access denied');
+            $this->prepareForbiddenResponse(sprintf(
+                    'Access to route %s from user role %s denied!',
+                    $route, $role));
+            return false;
         }
-        if (!$permission->controllerIsAllowed($role, $routerResult->getController(), $routerResult->getAction()))
+        if (!$permission->controllerIsAllowed($role, $controller, $action))
         {
             // access denied
-            exit('Access denied');
+            $this->prepareNotFoundResponse(sprintf(
+                    'Access to controller %s  and/or action %s from user role %s denied!',
+                    $controller, $action, $role));
+            return false;
         }
-        $file = $this->controllersDir . '/' . $routerResult->getController() . '.php';
         
+        return true;
+    }
+    
+    public function run(RouterResult $routerResult)
+    {
+        // if access denied return to application
+        if (!$this->checkPermissions($routerResult))
+        {
+            return ;
+        }
+     
+        // run controller
+        if (!$this->runController($routerResult))
+        {
+            return ;
+        }
+        
+        // check controller result
+        if ($this->controllerResult == null)
+        {
+            $this->controllerResult = new ViewModel();
+        }
+        else if (is_array($this->controllerResult))
+        {
+            $this->controllerResult = new ViewModel($this->controllerResult);
+        }
+        
+        // prepare response
+        if ($this->controllerResult instanceof ViewModel)
+        {
+            // render view
+            $renderer = $this->application->getViewRenderer();
+            $renderer->setTemplate($routerResult->getController() . '/' . $routerResult->getAction());
+            $content = $renderer->render($this->controllerResult);
+        
+            $this->response = new Response(200, $content);
+        }
+        else if ($this->controllerResult instanceof JsonModel)
+        {
+            // create json response
+            $headers = array('Content-Type: application/json');
+            $content = $this->controllerResult->getJson();
+            
+            $this->response = new Response(200, $content, $headers);
+        }
+    }
+    
+    protected function runController(RouterResult $routerResult)
+    {
+        // controller filename
+        $file = $this->controllersDir . '/' . $routerResult->getController() . '.php';     
         if (!file_exists($file))
         {
-            return $this->prepareNotFoundResponse();
+            $this->prepareNotFoundResponse(sprintf(
+                    'Not found filename %s of controller %s',
+                    $file, $routerResult->getController()));
+            return ;
         }
         require_once $file;
+        
+        // controller classname
         $class = str_replace('/', "\\", str_replace(' ', '', ucwords(str_replace('-', ' ', $routerResult->getController())))) . 'Controller';
         if (!class_exists($class, false))
         {
-            return $this->prepareNotFoundResponse();
+            $this->prepareNotFoundResponse(sprintf(
+                    'Not found controller class %s in file %s',
+                    $class, $file));
+            return ;
         }
+        
+        // instance object
         $controller = new $class($this);
+        
+        // check method
         $method = str_replace(' ', '', ucwords(str_replace('-', ' ', $routerResult->getAction()))) . 'Action';
         if (!method_exists($controller, $method))
         {
-            return $this->prepareNotFoundResponse();
+            $this->prepareNotFoundResponse(sprintf(
+                    'Not found controller %s action %s in file %s',
+                    $controller, $routerResult->getAction(), $file));
+            return false;
         }
         
-        $view = call_user_func(array($controller, $method));
-        if ($view == null)
-        {
-            $view = new \WebPaint\View\ViewModel();
-        } 
-        else if (is_array($view))
-        {
-            $view = new \WebPaint\View\ViewModel($view);
-        }
-        $renderer = $this->application->getViewRenderer();
-        $renderer->setTemplate($routerResult->getController() . '/' . $routerResult->getAction());
-        
-        $content = $renderer->render($view);
-        
-        $this->response = $content;
+        $this->controllerResult = call_user_func(array($controller, $method));
+        return true;
     }
     
-    public function prepareNotFoundResponse()
+    public function prepareNotFoundResponse($message = '')
     {
-        return $this->response = 'not found';
+        return $this->response = new Response(404, $message);
+    }
+    
+    public function prepareForbiddenResponse($message = '')
+    {
+        return $this->response = new Response(403, $message);
     }
 }

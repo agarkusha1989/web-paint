@@ -224,12 +224,35 @@ class Application
         }
         catch (\WebPaint\Router\RouteNotFound $exc) 
         {
-            // FIXME dispatch failed
-            $front->prepareNotFoundResponse();
+            // dispatch failed create not found response
+            $front->prepareNotFoundResponse($exc->getMessage());
         }
         
-        // TODO rendering application output
-        echo $front->getResponse();
+        $response = $front->getResponse();
+        $statusCode = $response->getStatusCode();
+        
+        if ($statusCode != 200)
+        {
+            $message = $response->getContent();
+            
+            switch ($statusCode)
+            {
+                case 404:
+                    $template = 'error/404err';
+                    break;
+                case 403:
+                    $template = 'error/403err';
+                    break;
+                default:
+                    $template = null;
+            }
+            $view = new View\ViewModel(array('message' => $message), $template);
+            $content = $this->getViewRenderer()->render($view);
+            $response->setContent($content);
+        }
+        
+        // rendering application output
+        $response->send();
     }
     
     public function getRoute()

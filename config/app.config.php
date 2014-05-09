@@ -27,7 +27,7 @@ return array(
     'permissions' => array(
         'routes' => array(
             'guest' => array('main', 'signin', 'signup'),
-            'user' => array('main', 'paint', 'signout'),
+            'user' => array('main', 'paint', 'paint-save', 'paint-save-as', 'signout'),
         ),
         'controllers' => array(
             'guest' => array(
