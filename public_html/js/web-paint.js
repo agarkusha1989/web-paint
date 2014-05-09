@@ -356,28 +356,15 @@ function WPCanvas(wp)
         
 }
 
-function WPFileSaver(wp)
-{
-    this.save = function()
-    {
-        
-    }
-    
-    this.download = function()
-    {
-        
-    }
-}
-
 function WP()
 {
     this.canvasId = "web-paint";
     
     this.canvas = new WPCanvas(this);
     this.menuBar = new WPMenuBar(this);
-    this.fileSaver = new WPFileSaver(this);
     
     var cntx2d = this.canvas.get2d();
+    
     
     // public methods
     // brush
@@ -455,5 +442,3 @@ function WP()
     }
     
 }
-
-WP();

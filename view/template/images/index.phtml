@@ -1,0 +1,37 @@
+<h1>My images</h1>
+
+<?php
+
+$count = count($images);
+$colls = 6;
+
+$c = 0;
+
+foreach ($images as $image): ?>
+
+<?php if ($c == 0): ?>
+<div class="row">
+<?php endif; ?>
+    
+<div class="col-md-2">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <?php echo $image->title; ?>
+    </div>
+    <div class="panel-body">
+        <a href="/images/load?id=<?php echo $image->id; ?>">
+            <img src="/images/load?id=<?php echo $image->id ?>" width="120" />
+        </a>
+    </div>
+</div>
+</div>
+    
+<?php 
+if ($c == $colls-1) {
+    ?></div><?php
+    $c = 0;
+} else {
+    $c++;
+} 
+endforeach; ?>
+

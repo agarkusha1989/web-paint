@@ -39,6 +39,7 @@
             <dvi class="collapse navbar-collapse" id="main-navigation">
                 <?php if ($this->authentication()->hasIdentity()): ?>
                 <ul class="nav navbar-nav">
+                    <li><a href="/images">Images</a></li>
                     <li><a href="/paint">Paint</a></li>
                 </ul>
                 <?php endif; ?>
@@ -68,7 +69,9 @@
 
     <!-- Content start -->
     <div class="container">
-    <?php echo isset($content) ? $content : ''; ?>
+        <div>
+        <?php echo isset($content) ? $content : ''; ?>
+        </div>
         <hr />
         <footer>
             &copy;2014
