@@ -187,8 +187,7 @@ class Application
      */
     public function run()
     {
-        // FIXME get requested route
-        $route            = $_SERVER['REQUEST_URI'];
+        $route            = $this->getRoute();;
         $routerDispatcher = $this->getRouterDispatcher();
         $front            = $this->getFront();
         
@@ -206,5 +205,16 @@ class Application
         
         // TODO rendering application output
         echo $front->getResponse();
+    }
+    
+    public function getRoute()
+    {
+        return str_replace(
+                '?' . $_SERVER['QUERY_STRING'], 
+                '',
+                str_replace(
+                        $_SERVER['SCRIPT_NAME'],
+                        '',
+                        $_SERVER['REQUEST_URI']));
     }
 }
