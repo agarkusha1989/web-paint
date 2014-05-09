@@ -10,11 +10,6 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
         $validator->setDbAdapter($this->front->getApplication()->getDbAdapter());
         $userTable      = new Model\UserTable($this->front->getApplication()->getDbAdapter());
         
-        if ($authentication->hasIdentity())
-        {
-            header('Location: /');
-        }
-        
         if (isset($_POST['submit']))
         {
             $data = array(
@@ -50,11 +45,6 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
         $viewModel      = new WebPaint\View\ViewModel();
         $validator      = new Validator\SigninFormValidator();
         
-        if ($authentication->hasIdentity())
-        {
-            header('Location: /');
-        }
-        
         if (isset($_POST['submit']))
         {
             $data = array(
@@ -84,11 +74,7 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
     public function signoutAction()
     {
         $authentication = $this->front->getApplication()->getAuthentication();
-        
-        if ($authentication->hasIdentity())
-        {
-            $authentication->clearIdentity();
-        }
+        $authentication->clearIdentity();
         
         if (isset($_SERVER['HTTP_REFERER']))
         {

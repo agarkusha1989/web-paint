@@ -6,7 +6,7 @@ class Image
 {
     public $id;
     public $user_id;
-    public $image_sr;
+    public $image;
     public $title;
     
     /**
@@ -16,10 +16,10 @@ class Image
      */
     public function fromArray(array $data)
     {
-        $this->id        = (!empty($data['id']) ? $data['id'] : null);
-        $this->user_id   = (!empty($data['user_id']) ? $data['user_id'] : null);
-        $this->image_src = (!empty($data['image_src']) ? $data['image_src'] : null);
-        $this->title     = (!empty($data['title']) ? $data['title'] : null);
+        $this->id      = (!empty($data['id']) ? $data['id'] : null);
+        $this->user_id = (!empty($data['user_id']) ? $data['user_id'] : null);
+        $this->image   = (!empty($data['image']) ? $data['image'] : null);
+        $this->title   = (!empty($data['title']) ? $data['title'] : null);
     }
     
     /**
