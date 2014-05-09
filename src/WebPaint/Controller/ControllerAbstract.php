@@ -2,6 +2,8 @@
 
 namespace WebPaint\Controller;
 
+use WebPaint\Http\Response;
+
 abstract class ControllerAbstract
 {
     /**
@@ -16,9 +18,19 @@ abstract class ControllerAbstract
         $this->front = $front;
     }
     
-    public function notFoundAction()
+    public function forbiddenAction($message = '')
     {
-        return $this->front->prepareNotFoundResponse();
+        return new Response(403, $message);
+    }
+    
+    public function errorAction($message = '')
+    {
+        return new Response(500, $message);
+    }
+    
+    public function notFoundAction($message = '')
+    {
+        return new Response(404, $message);
     }
     
     protected function render($template, $vars = array())

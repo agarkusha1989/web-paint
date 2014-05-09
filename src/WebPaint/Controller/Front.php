@@ -151,6 +151,10 @@ class Front
             
             $this->response = new Response(200, $content, $headers);
         }
+        else if ($this->controllerResult instanceof Response)
+        {
+            $this->response = $this->controllerResult;
+        }
     }
     
     protected function runController(RouterResult $routerResult)
