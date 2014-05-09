@@ -31,14 +31,13 @@ class ImagesController extends \WebPaint\Controller\ControllerAbstract
         
         if ($id == null)
         {
-            return new WebPaint\View\ViewModel(array('message' => 'Image with id = ' . $id . ' not found'), 'error/404err');
+            return $this->notFoundAction('Image with id = ' . $id . ' not found');
         }
         else if (!$imageTable->userIsAllow($id, $userId))
         {
-            $message = sprintf(
+            return $this->forbiddenAction(sprintf(
                     'Forbidden to access image with id = %d from user id %s',
-                    $id, $userId);
-            return new WebPaint\View\ViewModel(array('message' => $message), 'error/403err');
+                    $id, $userId));
         }
         else
         {
@@ -70,11 +69,12 @@ class ImagesController extends \WebPaint\Controller\ControllerAbstract
         
         if ($id == null)
         {
-            // TODO bad request
+            return $this->badRequestAction("Bad request param id is required");
         }
         else if (!$this->getImageTable()->userIsAllow($id, $userId))
         {
-            // TODO forbidden
+            return $this->forbiddenAction(sprintf(
+                    'Access denied for user id %d', $userId));
         }
         else
         {

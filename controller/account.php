@@ -30,7 +30,7 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
                 $authentication->getAdapter()->setCredential($data['password']);
                 $authentication->authenticate();
                 
-                header('Location: /');
+                return $this->redirectAction('/');
             }
             $viewModel->setVariable('messages', $validator->getMessages());
             $viewModel->setVariable('values', $data);
@@ -60,9 +60,7 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
                 
                 if ($authentication->authenticate())
                 {
-                    header('Location: /');
-                    
-                    exit;
+                    return $this->redirectAction('/');
                 }
                 $viewModel->setVariable('error', true);
             }
@@ -78,6 +76,6 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
         $authentication = $this->front->getApplication()->getAuthentication();
         $authentication->clearIdentity();
         
-        header('Location: /');
+        $this->redirectAction('/');
     }
 }
