@@ -76,6 +76,6 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
         $authentication = $this->front->getApplication()->getAuthentication();
         $authentication->clearIdentity();
         
-        $this->redirectAction('/');
+        return $this->redirectAction('/');
     }
 }
