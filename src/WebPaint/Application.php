@@ -33,6 +33,13 @@ class Application
     protected $front;
     
     /**
+     * Application permissions
+     * 
+     * @var Permission\Permission
+     */
+    protected $persmission;
+    
+    /**
      * Router dispatcher instance
      * 
      * @var Router\RouterDispatcher
@@ -136,6 +143,24 @@ class Application
     
     /**
      * 
+     * @return Permission\Permission
+     */
+    public function getPermission()
+    {
+        if (!($this->persmission instanceof Permission\Permission))
+        {
+            $config = $this->getConfig();
+            if (!isset($config->permissions))
+            {
+                throw new \RuntimeException("Initialization error permissions, the configuration is empty or not installed");
+            }
+            $this->persmission = new Permission\Permission($config->permissions->toArray());
+        }
+        return $this->persmission;
+    }
+    
+    /**
+     * 
      * @return Router\RouterDispatcher
      * @throws \RuntimeException
      */
@@ -194,7 +219,7 @@ class Application
         try 
         {
             $routerResult = $routerDispatcher->dispatch($route);
-            
+
             $front->run($routerResult);
         }
         catch (\WebPaint\Router\RouteNotFound $exc) 

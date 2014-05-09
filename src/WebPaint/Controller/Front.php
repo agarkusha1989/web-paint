@@ -55,6 +55,25 @@ class Front
     
     public function run(RouterResult $routerResult)
     {
+        $authentication = $this->application->getAuthentication();
+        $permission     = $this->application->getPermission();
+        
+        $role = 'guest';
+        if ($authentication->hasIdentity())
+        {
+            $role = 'user';
+        }
+        
+        if (!$permission->routeIsAllowed($role, $routerResult->getMatchedRouterRule()->getName()))
+        {
+            // access denied
+            exit('Access denied');
+        }
+        if (!$permission->controllerIsAllowed($role, $routerResult->getController(), $routerResult->getAction()))
+        {
+            // access denied
+            exit('Access denied');
+        }
         $file = $this->controllersDir . '/' . $routerResult->getController() . '.php';
         
         if (!file_exists($file))

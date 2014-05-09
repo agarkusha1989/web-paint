@@ -24,6 +24,22 @@ return array(
     'front' => array(
         'controllers_dir' => dirname(__DIR__) . '/controller',
     ),
+    'permissions' => array(
+        'routes' => array(
+            'guest' => array('main', 'signin', 'signup'),
+            'user' => array('main', 'paint', 'signout'),
+        ),
+        'controllers' => array(
+            'guest' => array(
+                'main', 
+                array('account', array('signin', 'signup')),
+            ),
+            'user' => array(
+                'main',
+                array('paint', array('index', 'save', 'saveas')),
+            ),
+        ),
+    ),
     'router_rules' => array(
         array(
             'name' => 'main',
@@ -36,12 +52,42 @@ return array(
             ),
         ),
         array(
+            'name' => 'images',
+            'options' => array(
+                'route' => '/images',
+                'defaults' => array(
+                    'controller' => 'images',
+                    'action' => 'index',
+                ),
+            ),
+        ),
+        array(
             'name' => 'paint',
             'options' => array(
                 'route' => '/paint',
                 'defaults' => array(
                     'controller' => 'paint',
                     'action' => 'index',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'paint-save',
+            'options' => array(
+                'route' => '/paint/save',
+                'defaults' => array(
+                    'controller' => 'paint',
+                    'action' => 'save',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'paint-save-as',
+            'options' => array(
+                'route' => '/paint/saveas',
+                'defaults' => array(
+                    'controller' => 'paint',
+                    'action' => 'saveas',
                 ),
             ),
         ),
