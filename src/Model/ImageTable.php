@@ -2,11 +2,41 @@
 
 namespace Model;
 
+use WebPaint\Db\Adapter;
+
 class ImageTable extends \WebPaint\Db\TableGateway
 {
     protected $name = 'images';
     
     protected $resultSetClass = 'Model\Image';
+    
+    public function getImageData($id)
+    {
+        $statement = $this->dbAdapter->prepare(
+                'select image from images where id = ?');
+        $statement->execute(array($id));
+        
+        if (!$row = $statement->fetch(Adapter::FETCH_ASSOC))
+        {
+            throw new \Exception('Could not get image data with image id ' . $id);
+        }
+        
+        return $row['image'];
+    }
+    
+    public function getUserImages($userId)
+    {
+        $statement = $this->dbAdapter->prepare(
+                'select id, title from images where user_id = ?');
+        $statement->execute(array($userId));
+        
+        $rowSet = array();
+        while ($row = $statement->fetch(\WebPaint\Db\Adapter::FETCH_ASSOC))
+        {
+            $rowSet[] = $this->createResultSet($row);
+        }
+        return $rowSet;
+    }
     
     public function hasImage($id)
     {
