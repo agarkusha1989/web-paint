@@ -18,6 +18,11 @@ abstract class ControllerAbstract
         $this->front = $front;
     }
     
+    public function redirectAction($location)
+    {
+        return new Response(307, '', array('Location: ' . $location));
+    }
+    
     public function forbiddenAction($message = '')
     {
         return new Response(403, $message);
@@ -31,6 +36,11 @@ abstract class ControllerAbstract
     public function notFoundAction($message = '')
     {
         return new Response(404, $message);
+    }
+    
+    public function badRequestAction($message = '')
+    {
+        return new Response(400, $message);
     }
     
     protected function render($template, $vars = array())
