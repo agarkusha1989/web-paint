@@ -76,13 +76,6 @@ class AccountController extends WebPaint\Controller\ControllerAbstract
         $authentication = $this->front->getApplication()->getAuthentication();
         $authentication->clearIdentity();
         
-        if (isset($_SERVER['HTTP_REFERER']))
-        {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-        }
-        else
-        {
-            header('Location: /');
-        }
+        header('Location: /');
     }
 }

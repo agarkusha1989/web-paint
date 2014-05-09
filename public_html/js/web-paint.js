@@ -156,7 +156,7 @@ function WPMenuBar(wp)
         }
         */
         wp.canvas.clear();
-        fileId = undefined;
+        wp.imageId = undefined;
         
         while(undefined == (width = prompt("Image width"))) ;
         while(undefined == (height = prompt("Image height"))) ;
@@ -166,15 +166,34 @@ function WPMenuBar(wp)
     // download
     buttonDownload.addEventListener('click', function()
     {
-        console.log('download');
+        var ua = window.navigator.userAgent;
+ 
+        if (ua.indexOf("Chrome") > 0) 
+        {
+            var link = document.createElement('a');
+            if (wp.imageTitle != undefined)
+            {
+                link.download = wp.imageTitle + '.png';
+            }
+            else 
+            {
+                link.download = "image.png";
+            }
+            link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+            link.click();
+        } 
+        else
+        {
+            document.location.href = wp.canvas.getData().replace("image/png", "image/octet-stream");
+        }
     });
     // save
     buttonSave.addEventListener('click', function()
     {
-        if (fileId != undefined)
+        if (wp.imageId != undefined)
         {
             ajax = new XMLHttpRequest();
-            ajax.open("POST", "/paint/save?id=" + fileId, false);
+            ajax.open("POST", "/paint/save?id=" + wp.imageId, false);
             ajax.setRequestHeader("Content-type", "application/upload");
             ajax.onreadystatechange = function()
             {
@@ -202,10 +221,10 @@ function WPMenuBar(wp)
     // save as
     buttonSaveAs.addEventListener('click', function()
     {
-        while(undefined == (filename = prompt("Enter new filename"))) ;
+        while(undefined == (wp.imageTitle = prompt("Enter new title"))) ;
         
         ajax = new XMLHttpRequest();
-        ajax.open("POST", "/paint/saveas?filename=" + filename, false);
+        ajax.open("POST", "/paint/saveas?filename=" + wp.imageTitle, false);
         ajax.setRequestHeader("Content-type", "application/upload");
         ajax.onreadystatechange = function()
         {
@@ -226,7 +245,7 @@ function WPMenuBar(wp)
                     alert('Save file error, insert id is null');
                 }
                 
-                fileId = json.id;
+                wp.imageId = json.id;
             }
         }
         ajax.send(wp.canvas.getData());
@@ -356,15 +375,31 @@ function WPCanvas(wp)
         
 }
 
-function WP()
+function WP(id)
 {
     this.canvasId = "web-paint";
     
     this.canvas = new WPCanvas(this);
     this.menuBar = new WPMenuBar(this);
     
-    var cntx2d = this.canvas.get2d();
+    this.imageId = undefined;
+    this.imageTitle = undefined;
     
+    var cntx2d = this.canvas.get2d();
+    var canvas = this.canvas;
+    
+    if (id != undefined)
+    {
+        var img = new Image();
+        img.onload = function()
+        {
+            console.log('Loaded image withd id = ' + id + ' and size ' + this.width + 'x' + this.height);
+            canvas.setSize({"width": this.width, "height": this.height});
+            cntx2d.drawImage(img, 0, 0);
+        }
+        img.src = '/images/load?id=' + id;
+        this.imageId = id;
+    }
     
     // public methods
     // brush

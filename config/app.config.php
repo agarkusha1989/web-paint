@@ -27,7 +27,7 @@ return array(
     'permissions' => array(
         'routes' => array(
             'guest' => array('main', 'signin', 'signup'),
-            'user' => array('main', 'paint', 'paint-save', 'paint-save-as', 'signout'),
+            'user' => array('main', 'images', 'images-load', 'images-change', 'paint', 'paint-save', 'paint-save-as', 'signout'),
         ),
         'controllers' => array(
             'guest' => array(
@@ -36,7 +36,9 @@ return array(
             ),
             'user' => array(
                 'main',
+                array('account', array('signout')),
                 array('paint', array('index', 'save', 'saveas')),
+                'images',
             ),
         ),
     ),
@@ -58,6 +60,26 @@ return array(
                 'defaults' => array(
                     'controller' => 'images',
                     'action' => 'index',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'images-load',
+            'options' => array(
+                'route' => '/images/load',
+                'defaults' => array(
+                    'controller' => 'images',
+                    'action' => 'load',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'images-change',
+            'options' => array(
+                'route' => '/images/change',
+                'defaults' => array(
+                    'controller' => 'images',
+                    'action' => 'change',
                 ),
             ),
         ),

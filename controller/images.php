@@ -62,4 +62,26 @@ class ImagesController extends \WebPaint\Controller\ControllerAbstract
             'images' => $this->getImageTable()->getUserImages($userId),
         );
     }
+    
+    public function changeAction()
+    {
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $userId = $this->front->getApplication()->getAuthentication()->getIdentity()->id;
+        
+        if ($id == null)
+        {
+            // TODO bad request
+        }
+        else if (!$this->getImageTable()->userIsAllow($id, $userId))
+        {
+            // TODO forbidden
+        }
+        else
+        {
+            return array(
+                'id' => $id,
+            );
+        }
+    }
+    
 }

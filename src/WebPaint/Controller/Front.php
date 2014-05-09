@@ -89,7 +89,7 @@ class Front
         if (!$permission->controllerIsAllowed($role, $controller, $action))
         {
             // access denied
-            $this->prepareNotFoundResponse(sprintf(
+            $this->prepareForbiddenResponse(sprintf(
                     'Access to controller %s  and/or action %s from user role %s denied!',
                     $controller, $action, $role));
             return false;
