@@ -14,7 +14,22 @@ class Response
         $this->content    = $content;
         $this->headers    = $headers;
     }
+    
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
 
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+    
     public function send()
     {
         if (function_exists('http_response_code'))
@@ -32,5 +47,20 @@ class Response
         }
         
         echo $this->content;
+    }
+    
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
     }
 }
