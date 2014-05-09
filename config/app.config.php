@@ -27,7 +27,11 @@ return array(
     'permissions' => array(
         'routes' => array(
             'guest' => array('main', 'signin', 'signup'),
-            'user' => array('main', 'images', 'images-load', 'images-change', 'paint', 'paint-save', 'paint-save-as', 'signout'),
+            'user' => array(
+                'main', 
+                'images', 'images-load', 'images-change', 'images-delete',
+                'paint', 'paint-save', 'paint-save-as', 
+                'signout'),
         ),
         'controllers' => array(
             'guest' => array(
@@ -80,6 +84,16 @@ return array(
                 'defaults' => array(
                     'controller' => 'images',
                     'action' => 'change',
+                ),
+            ),
+        ),
+        array(
+            'name' => 'images-delete',
+            'options' => array(
+                'route' => '/images/delete',
+                'defaults' => array(
+                    'controller' => 'images',
+                    'action' => 'delete',
                 ),
             ),
         ),

@@ -22,6 +22,20 @@ class ImagesController extends \WebPaint\Controller\ControllerAbstract
         return $this->imageTable;
     }
     
+    public function deleteAction()
+    {
+        $userId     = $this->front->getApplication()->getAuthentication()->getIdentity()->id;
+        $id         = isset($_GET['id']) ? $_GET['id'] : null;
+        $imageTable = $this->getImageTable();
+        
+        if ($imageTable->userIsAllow($id, $userId))
+        {
+            $imageTable->deleteImage($id);
+        }
+        
+        return $this->redirectAction('/images');
+    }
+    
     public function loadAction()
     {
         $userId     = $this->front->getApplication()->getAuthentication()->getIdentity()->id;

@@ -10,6 +10,13 @@ class ImageTable extends \WebPaint\Db\TableGateway
     
     protected $resultSetClass = 'Model\Image';
     
+    public function deleteImage($id)
+    {
+        $statement = $this->dbAdapter->prepare(
+                'delete from images where id = ?');
+        $statement->execute(array($id));
+    }
+    
     public function getImageData($id)
     {
         $statement = $this->dbAdapter->prepare(
