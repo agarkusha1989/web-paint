@@ -22,6 +22,11 @@ class RouterRule
         }
     }
     
+    public function getName()
+    {
+        return $this->name;
+    }
+    
     public function getOption($name, $default = null)
     {
         return isset($this->options[$name]) ? $this->options[$name] : $default;
